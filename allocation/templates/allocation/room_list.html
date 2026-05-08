@@ -1,0 +1,50 @@
+{% extends 'allocation/base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold mb-0">Rooms</h4>
+    <a href="{% url 'room_add' %}" class="btn btn-dark">+ Add Room</a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Room No</th>
+                    <th>Block</th>
+                    <th>Gender</th>
+                    <th>Capacity</th>
+                    <th>Occupied</th>
+                    <th>Available</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in room_data %}
+                <tr>
+                    <td>{{ item.room.room_number }}</td>
+                    <td>{{ item.room.block }}</td>
+                    <td>{{ item.room.gender_type }}</td>
+                    <td>{{ item.room.capacity }}</td>
+                    <td>{{ item.occupied }}</td>
+                    <td>{{ item.available }}</td>
+                    <td>
+                        {% if item.is_full %}
+                            <span class="badge bg-danger">Full</span>
+                        {% else %}
+                            <span class="badge bg-success">Available</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'room_delete' item.room.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="8" class="text-center text-muted py-3">No rooms added yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

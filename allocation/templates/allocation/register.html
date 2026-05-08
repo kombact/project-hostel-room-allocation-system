@@ -1,0 +1,32 @@
+{% extends 'allocation/base.html' %}
+{% block auth_content %}
+<div class="d-flex justify-content-center align-items-center py-5">
+    <div class="card shadow p-4" style="width:480px;">
+        <h4 class="fw-bold mb-1 text-center">Student Registration</h4>
+        <p class="text-center text-muted mb-4 small">Your roll number will be used to login</p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="mb-3">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="text-danger small">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-dark w-100">Register</button>
+        </form>
+        <p class="text-center mt-3 text-muted small">
+            Already registered? <a href="{% url 'login' %}">Login here</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'allocation/base.html' %}
+{% block auth_content %}
+<div class="d-flex justify-content-center align-items-center" style="min-height:90vh;">
+    <div class="card shadow p-4" style="width:380px;">
+        <h4 class="text-center fw-bold mb-1">🏠 Hostel Management</h4>
+        <p class="text-center text-muted mb-4">Student Login</p>
+
+        {% if form.errors %}
+            <div class="alert alert-danger">Invalid roll number or password.</div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">Roll Number</label>
+                <input type="text" name="username" class="form-control" required autofocus>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-dark w-100">Login</button>
+        </form>
+        <p class="text-center mt-3 text-muted small">
+            New student? <a href="{% url 'register' %}">Register here</a>
+        </p>
+        <hr>
+        <p class="text-center text-muted small">
+            Are you an admin? <a href="{% url 'admin_login' %}">Admin Login</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

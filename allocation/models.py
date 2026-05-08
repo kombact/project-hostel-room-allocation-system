@@ -34,7 +34,7 @@ class Room(models.Model):
         ('Female', 'Female'),
     ]
 
-    room_number = models.CharField(max_length=10, unique=True)
+    room_number = models.CharField(max_length=10)
     block = models.CharField(max_length=10)
     gender_type = models.CharField(max_length=10, choices=GENDER_CHOICES)
     capacity = models.PositiveIntegerField()
@@ -68,3 +68,20 @@ class WaitlistEntry(models.Model):
 
     def __str__(self):
         return f"Waitlist - {self.student.name}"
+
+# This model stores fee details for each student
+class Fee(models.Model):
+
+    STATUS_CHOICES = [
+        ('Paid', 'Paid'),
+        ('Unpaid', 'Unpaid'),
+    ]
+
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    description = models.CharField(max_length=200)  # e.g. "Hostel Fee - June 2025"
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    due_date = models.DateField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Unpaid')
+
+    def __str__(self):
+        return f"{self.student.name} - {self.description}"

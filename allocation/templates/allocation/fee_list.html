@@ -1,0 +1,53 @@
+{% extends 'allocation/base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold mb-0">Fees</h4>
+    <a href="{% url 'fee_add' %}" class="btn btn-dark">+ Add Fee</a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Student</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fee in fees %}
+                <tr>
+                    <td>{{ fee.student.name }}</td>
+                    <td>{{ fee.description }}</td>
+                    <td>₹{{ fee.amount }}</td>
+                    <td>{{ fee.due_date }}</td>
+                    <td>
+                        {% if fee.status == 'Paid' %}
+                            <span class="badge bg-success">Paid</span>
+                        {% else %}
+                            <span class="badge bg-danger">Unpaid</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form method="post" action="{% url 'fee_toggle' fee.pk %}">
+                            {% csrf_token %}
+                            {% if fee.status == 'Unpaid' %}
+                                <button type="submit" class="btn btn-sm btn-outline-success">Mark Paid</button>
+                            {% else %}
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Mark Unpaid</button>
+                            {% endif %}
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6" class="text-center text-muted py-3">No fees added yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

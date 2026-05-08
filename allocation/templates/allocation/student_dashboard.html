@@ -1,0 +1,61 @@
+{% extends 'allocation/base.html' %}
+{% block content %}
+<h4 class="fw-bold mb-4">My Profile</h4>
+
+<!-- Student Info Card -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white fw-semibold">Personal Details</div>
+    <div class="card-body">
+        <table class="table table-borderless mb-0">
+            <tr><th>Name</th><td>{{ student.name }}</td></tr>
+            <tr><th>Roll Number</th><td>{{ student.roll_number }}</td></tr>
+            <tr><th>Gender</th><td>{{ student.gender }}</td></tr>
+            <tr><th>Course</th><td>{{ student.course }}</td></tr>
+            <tr><th>Year</th><td>{{ student.year }}</td></tr>
+            <tr><th>Contact</th><td>{{ student.contact }}</td></tr>
+            <tr><th>Email</th><td>{{ student.email }}</td></tr>
+        </table>
+    </div>
+</div>
+
+<!-- Room Status Card -->
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white fw-semibold">Room Status</div>
+    <div class="card-body">
+
+        {% if allocation %}
+        <!-- Student has a room -->
+        <div class="alert alert-success">
+            <i class="bi bi-check-circle"></i> You have been allocated a room!
+        </div>
+        <table class="table table-borderless mb-0">
+            <tr><th>Room Number</th><td>{{ allocation.room.room_number }}</td></tr>
+            <tr><th>Block</th><td>{{ allocation.room.block }}</td></tr>
+            <tr><th>Gender Type</th><td>{{ allocation.room.gender_type }}</td></tr>
+            <tr><th>Capacity</th><td>{{ allocation.room.capacity }}</td></tr>
+            <tr><th>Allocated Date</th><td>{{ allocation.allocated_date }}</td></tr>
+            <tr><th>Status</th><td><span class="badge bg-success">{{ allocation.status }}</span></td></tr>
+        </table>
+
+       {% elif waitlist_entry %}
+<div class="alert alert-warning">
+    <i class="bi bi-clock-history"></i> Your room application is under review. Please wait for admin to allocate a room.
+</div>
+<table class="table table-borderless mb-0">
+    <tr><th>Applied On</th><td>{{ waitlist_entry.requested_date }}</td></tr>
+    <tr><th>Status</th><td><span class="badge bg-warning text-dark">Pending</span></td></tr>
+</table>
+
+        {% else %}
+<!-- Student has neither a room nor is on waitlist -->
+<div class="alert alert-info">
+    <i class="bi bi-info-circle"></i> You have not been allocated a room yet.
+</div>
+<a href="{% url 'apply_for_room' %}" class="btn btn-dark">
+    <i class="bi bi-send"></i> Apply for Room
+</a>
+{% endif %}
+
+    </div>
+</div>
+{% endblock %}
