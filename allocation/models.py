@@ -23,7 +23,7 @@ class Student(models.Model):
     email = models.EmailField(unique=True)
 
     def __str__(self):
-        return self.name
+        return f"Rollno :{self.roll_number} --- Name:{self.name}"
 
 
 # This model stores room information

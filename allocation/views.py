@@ -6,10 +6,13 @@ from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Student, Room, Allocation, WaitlistEntry,Fee
-from .forms import StudentRegisterForm, RoomForm, AllocationForm, WaitlistForm,FeeForm
 
 
+
+from django.http import JsonResponse
+
+from .models import *
+from .forms import *
 # ─── HELPER ───────────────────────────────────────────────
 # Checks if the logged in user is admin/staff
 def is_admin(user):
@@ -185,16 +188,33 @@ def allocation_list(request):
 # Add allocation page
 @login_required
 def allocation_add(request):
+    
     if not is_admin(request.user):
         return redirect('student_dashboard')
 
     form = AllocationForm(request.POST or None)
+
     if form.is_valid():
-        form.save()
-        messages.success(request, 'Room allocated successfully.')
+
+        allocation = form.save()
+
+        # Remove student from waiting list
+        WaitlistEntry.objects.filter(
+            student=allocation.student
+        ).delete()
+
+        messages.success(
+            request,
+            'Room allocated successfully.'
+        )
+
         return redirect('allocation_list')
 
-    return render(request, 'allocation/allocation_form.html', {'form': form})
+    return render(
+        request,
+        'allocation/allocation_form.html',
+        {'form': form}
+    )
 
 
 # Vacate a room
@@ -380,3 +400,28 @@ def my_fees(request):
     student = get_object_or_404(Student, user=request.user)
     fees = Fee.objects.filter(student=student).order_by('due_date')
     return render(request, 'allocation/my_fees.html', {'fees': fees})
+
+@login_required
+def load_rooms(request):
+    
+    student_id = request.GET.get('student')
+
+    rooms = []
+
+    if student_id:
+
+        student = Student.objects.get(id=student_id)
+
+        rooms_data = Room.objects.filter(
+            gender_type=student.gender
+        )
+
+        rooms = list(
+            rooms_data.values(
+                'id',
+                'room_number',
+                'block'
+            )
+        )
+
+    return JsonResponse(rooms, safe=False)

@@ -20,6 +20,7 @@ urlpatterns = [
     path('waitlist/', views.waitlist, name='waitlist'),
     path('waitlist/add/', views.waitlist_add, name='waitlist_add'),
     path('waitlist/<int:pk>/remove/', views.waitlist_remove, name='waitlist_remove'),
+    path('ajax/load-rooms/',views.load_rooms,name='ajax_load_rooms'),
 
     # Student page
     path('my-room/', views.student_dashboard, name='student_dashboard'),

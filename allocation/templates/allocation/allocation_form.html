@@ -25,4 +25,44 @@
         </div>
     </div>
 </div>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const studentDropdown = document.getElementById('id_student');
+    const roomDropdown = document.getElementById('id_room');
+
+    studentDropdown.addEventListener('change', function () {
+
+        const studentId = this.value;
+
+        fetch(`/ajax/load-rooms/?student=${studentId}`)
+
+            .then(response => response.json())
+
+            .then(data => {
+
+                roomDropdown.innerHTML = '';
+
+                data.forEach(room => {
+
+                    const option = document.createElement('option');
+
+                    option.value = room.id;
+
+                    option.textContent =
+                        `Room ${room.room_number} - Block ${room.block}`;
+
+                    roomDropdown.appendChild(option);
+
+                });
+
+            });
+
+    });
+
+});
+
+</script>
 {% endblock %}

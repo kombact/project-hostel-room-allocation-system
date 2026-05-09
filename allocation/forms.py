@@ -41,7 +41,7 @@ class RoomForm(forms.ModelForm):
 class AllocationForm(forms.ModelForm):
     class Meta:
         model = Allocation
-        fields = ['student', 'room']
+        fields = ['student', 'room',]
         widgets = {
             'student': forms.Select(attrs={'class': 'form-select'}),
             'room': forms.Select(attrs={'class': 'form-select'}),
